@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+
+  "name": "MyPlugin",
+  "description": "Does whatever I want it to",
+  "version": "1.0",
+
+  "content_scripts": [
+    {
+      "matches":[
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "main.js"
+      ]
+    }
+  ],
+  "icons": {
+    "128": "icons/icon128.png",
+    "48": "icons/icon48.png",
+    "16": "icons/button.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/button.png",
+    "default_title": "Configuration",
+    "default_popup": "optionsPage/options.html"
+  },
+  "options_page": "optionsPage/options.html",
+  "background": {
+    "scripts": ["backgroundPage/background.js"]
+  },
+  "permissions": [
+    "storage"
+  ]
+}
