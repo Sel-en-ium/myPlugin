@@ -6,29 +6,58 @@
     storage = window.chrome.storage.sync,
     form = document.getElementById('options-form');
 
-// Saves options to chrome.storage
-  function save_options() {
+  // Reads the form and returns the options object
+  function readForm() {
     var
       options = {};
-
-    window.myPlugin.utils.forEach(form.elements, function (index, element) {
+    window.myPlugin.utils.forEach(form.elements, function (index, node) {
       /*jslint unparam:true*/
-      if (element.name !== 'save') {
-        options[element.name] = element.value;
+      if (node.name === 'injectOn') {
+        options[node.name] = node.checked;
+      } else if (node.name !== 'save') {
+        // Includes 'server'
+        options[node.name] = node.value;
       }
     });
+    return options;
+  }
 
+  // Saves options to chrome.storage
+  function save_options() {
+    var
+      options = readForm();
     storage.set(options, function () {
       window.console.log('saved');
     });
   }
 
-// Restores the option in the view
+  function populateForm(options) {
+    window.myPlugin.utils.forEach(options, function (optionName, optionVal) {
+      try {
+        var
+          node = form.elements[optionName];
+        if (optionName === 'injectOn') {
+          node.checked = optionVal;
+        } else if (node.name !== 'save') {
+          // Includes 'server'
+          node.setAttribute('value', optionVal);
+        }
+      } catch (e) {
+        window.console.error(e);
+      }
+    });
+  }
+
+  // Restores the option in the view
   function restore_options() {
+    var
+      defaultOptions = {
+        injectOn: false,
+        server: ''
+      };
     storage.get(function (options) {
-      window.myPlugin.utils.forEach(options, function (optionName, optionVal) {
-        form.elements[optionName].setAttribute('value', optionVal);
-      });
+      options = window.myPlugin.utils.merge(defaultOptions, options);
+      populateForm(options);
     });
   }
 

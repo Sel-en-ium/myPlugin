@@ -28,6 +28,39 @@
     }
   };
 
+  /**
+   * Recursively merges two objects.
+   *
+   * @param {Object} obj1 - Starting object, may have properties in common overwritten.
+   * @param {Object} obj2 - Object whose properties will be added to obj1.
+   *
+   * @returns {Object} obj1 with all of obj2 properties.
+   */
+  utils.merge = function (obj1, obj2) {
+    var key;
+
+    obj1 = obj1 || {};
+    obj1 = JSON.parse(JSON.stringify(obj1));
+
+    // Add obj2 properties
+    for (key in obj2) {
+      if (obj2.hasOwnProperty(key)) {
+        try {
+          if (obj2[key].constructor === Object) {
+            // Recursive call
+            obj1[key] = utils.merge(obj1[key], obj2[key]);
+          } else {
+            obj1[key] = obj2[key];
+          }
+        } catch (e) {
+          obj1[key] = obj2[key];
+        }
+      }
+    }
+
+    return obj1;
+  };
+
   window.myPlugin = window.myPlugin || {};
   window.myPlugin.utils = utils;
 

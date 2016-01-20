@@ -16,7 +16,9 @@
   }
 
   window.chrome.runtime.sendMessage({name: "getOptions"}, function (options) {
-    inject(options.server);
+    if (options.injectOn) {
+      inject(options.server);
+    }
   });
 
 }());
