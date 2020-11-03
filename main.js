@@ -2,11 +2,13 @@
 (function () {
   'use strict';
 
-  function inject(server) {
-    var
-      injectScript = document.createElement('script');
-    injectScript.src = server;
+  function inject(options) {
+    var injectScript = document.createElement('script');
+    injectScript.src = options.server;
     injectScript.async = true;
+    if (options.isModule) {
+      injectScript.type = 'module';
+    }
 
     if (document.getElementsByTagName('body').length === 0) {
       document.getElementsByTagName('html')[0].appendChild(injectScript);
@@ -17,7 +19,7 @@
 
   window.chrome.runtime.sendMessage({name: "getOptions"}, function (options) {
     if (options.injectOn) {
-      inject(options.server);
+      inject(options);
     }
   });
 

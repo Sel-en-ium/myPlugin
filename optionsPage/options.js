@@ -12,7 +12,7 @@
       options = {};
     window.myPlugin.utils.forEach(form.elements, function (index, node) {
       /*jslint unparam:true*/
-      if (node.name === 'injectOn') {
+      if (node.name === 'injectOn' || node.name === 'isModule') {
         options[node.name] = node.checked;
       } else if (node.name !== 'save') {
         // Includes 'server'
@@ -36,7 +36,7 @@
       try {
         var
           node = form.elements[optionName];
-        if (optionName === 'injectOn') {
+        if (optionName === 'injectOn' || optionName === 'isModule') {
           node.checked = optionVal;
         } else if (node.name !== 'save') {
           // Includes 'server'
@@ -53,6 +53,7 @@
     var
       defaultOptions = {
         injectOn: false,
+        isModule: false,
         server: ''
       };
     storage.get(function (options) {
