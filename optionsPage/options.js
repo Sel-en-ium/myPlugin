@@ -12,7 +12,7 @@
       options = {};
     window.myPlugin.utils.forEach(form.elements, function (index, node) {
       /*jslint unparam:true*/
-      if (node.name === 'injectOn' || node.name === 'isModule') {
+      if (node.type === 'checkbox') {
         options[node.name] = node.checked;
       } else if (node.name !== 'save') {
         // Includes 'server'
@@ -36,7 +36,7 @@
       try {
         var
           node = form.elements[optionName];
-        if (optionName === 'injectOn' || optionName === 'isModule') {
+        if (node.type === 'checkbox') {
           node.checked = optionVal;
         } else if (node.name !== 'save') {
           // Includes 'server'
@@ -50,16 +50,7 @@
 
   // Restores the option in the view
   function restore_options() {
-    var
-      defaultOptions = {
-        injectOn: false,
-        isModule: false,
-        server: ''
-      };
-    storage.get(function (options) {
-      options = window.myPlugin.utils.merge(defaultOptions, options);
-      populateForm(options);
-    });
+    storage.get(populateForm);
   }
 
   form.addEventListener('submit', function (e) {
